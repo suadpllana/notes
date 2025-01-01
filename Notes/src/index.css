@@ -1,0 +1,58 @@
+body{
+  background-color: lightpink;
+  text-align: center;
+  font-family:Arial, Helvetica, sans-serif;
+  margin: 0
+}
+#notesContainer{
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+
+.contentedTable{
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 17px;
+  position: relative; 
+   margin-left: 35%;
+   margin-bottom: 20px;
+   margin-top: 20px; 
+   display: block;
+}
+#addNote{
+  width: 120px;
+  height: 35px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  font-size: 17px;
+  background-color: peru;
+  margin-bottom: 3rem;
+}
+.delete{
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+
+  
+}
+
+@media (max-width: 767px){
+  #notesContainer{
+      grid-template-columns: 1fr;
+  }
+  .contentedTable , .delete{
+      margin: 0;
+      margin-left: 5%;
+      margin-bottom: 10px;
+  }
+ 
+}
+@media (min-width: 768px) and (max-width: 1217px){
+  .contentedTable , .delete{
+      margin: 0;
+      margin-left: 8%;
+      margin-bottom: 15px;
+  }
+}

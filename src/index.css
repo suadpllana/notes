@@ -21,8 +21,10 @@ body{
    display: block;
 }
 #addNote{
-  width: 120px;
-  height: 35px;
+  min-width: 120px;
+  min-height: 35px;
+  width: auto;
+  height: auto;
   border-radius: 100px;
   border: none;
   cursor: pointer;

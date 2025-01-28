@@ -1,103 +1,111 @@
-import React from 'react'
-import {useState , useEffect} from "react"
+import React, { useState, useEffect } from "react";
+
 const Notes = () => {
-    const [notes, setNotes] = useState(() => {
-     const notesData = localStorage.getItem("notesData");
-     return notesData ? JSON.parse(notesData) : []   
-    })
-    const [storedNotes, setStoredNotes]  = useState(() => {
-        const notesData = localStorage.getItem("notesData");
-        return notesData ? JSON.parse(notesData) : []
-    })
-    
-    const [ title,setTitle] = useState("")
+  const [notes, setNotes] = useState(() => {
+    const notesData = localStorage.getItem("notesData");
+    return notesData ? JSON.parse(notesData) : [];
+  });
   
-        useEffect(() => {
-            localStorage.setItem("notesData" , JSON.stringify(notes)
-            )
-        } ,[notes])
-    useEffect(() => {
-        localStorage.setItem("notesData" , JSON.stringify(notes))
+  const [storedNotes, setStoredNotes] = useState(notes); 
+  const [title, setTitle] = useState("");
 
-    } ,[notes])
-    
 
-    function addNote(){
-        setNotes((prev) => [
-            ...prev , 
-            {
-                id:Math.random(),
-                title: title
-            }
-        ])
-        setStoredNotes((prev) => [
-            ...prev , 
-            {
-                id:Math.random(),
-                title: title
-            }
-        ])
-      
+  useEffect(() => {
+    if (notes.length > 0) {
+      localStorage.setItem("notesData", JSON.stringify(notes));
     }
-    function deleteNote(id){
-        const filteredNotes = notes.filter((note) => note.id !== id);
-        setNotes(filteredNotes);
-        setStoredNotes(filteredNotes)
+  }, [notes]);
+
+  function addNote() {
+    const newNote = {
+      id: Math.random(),
+      title: title,
+    };
+
+    const updatedNotes = [...notes, newNote];
+    setNotes(updatedNotes);
+    setStoredNotes(updatedNotes); 
+    setTitle(""); 
+  }
+
+  function deleteNote(id) {
+    const updatedNotes = notes.filter((note) => note.id !== id);
+    setNotes(updatedNotes);
+    setStoredNotes(updatedNotes);
+  }
+
+  function handleFilterNotes(text) {
+    if (text === "") {
+      setNotes(storedNotes);
+    } else {
+      const filteredNotes = storedNotes.filter((note) =>
+        note.title.toLowerCase().includes(text.toLowerCase())
+      );
+      setNotes(filteredNotes); 
     }
-    function handleFilterNotes(text) {
+  }
 
-        const filteredNotes = storedNotes.filter(note => note.title.includes(text));
-        setNotes(filteredNotes);
-    }
-    function saveNote(text, id){
-        setNotes((prev) => 
-            prev.map((n) => n.id === id ? {...n , title: text} : n)
-         )
-         setStoredNotes((prev) => 
-            prev.map((n) => n.id === id ? {...n , title: text} : n)
-         )
-        
-        
-        }
+  function saveNote(text, id) {
+    const updatedNotes = notes.map((n) => (n.id === id ? { ...n, title: text } : n));
+    setNotes(updatedNotes);
+    setStoredNotes(updatedNotes); 
+  }
 
-        function getCurrentDate(){
-            const months = ["January", "February" , "March","April","May","June","July","August","September","October","November","December"]
-            const date = new Date();
-            const monthIndex = date.getMonth();
-            const year = date.getFullYear();
-            const day = date.getDate();
+  function getCurrentDate() {
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const date = new Date();
+    const monthIndex = date.getMonth();
+    const year = date.getFullYear();
+    const day = date.getDate();
 
-            return `${year}/${day}/${months[monthIndex]}`
-
-        }
-
-
-
+    return `${year}/${day}/${months[monthIndex]}`;
+  }
 
   return (
     <div>
-       <h1>📒Notes</h1>
-    <button id="addNote" onClick={addNote}>Create Note</button><br />
-    <input className="search-input" type="text" placeholder="Search for a text in the note" name="" id="" onChange={(e) => handleFilterNotes(e.target.value)}/>
-    <div id="notesContainer">
+      <h1>📒Notes</h1>
+      <button id="addNote" onClick={addNote}>
+        Create Note
+      </button>
+      <br />
+      <input
+        className="search-input"
+        type="text"
+        placeholder="Search for a text in the note"
+        onChange={(e) => handleFilterNotes(e.target.value)}
+      />
+      <div id="notesContainer">
         {notes.map((note) => (
- <div key={note.id}>
-    
-    <textarea defaultValue={note.title} onChange={(e) => saveNote(e.target.value , note.id)} cols="40" rows="10">
-    
-    </textarea><br/>
-    <p className="currentDate">{getCurrentDate()}</p>
-    
-
- <button className="delete" onClick={() => deleteNote(note.id)}>🗑️</button>
- </div>
-
+          <div key={note.id}>
+            <textarea
+              value={note.title}
+              onChange={(e) => saveNote(e.target.value, note.id)}
+              cols="40"
+              rows="10"
+            ></textarea>
+            <br />
+            <p className="currentDate">{getCurrentDate()}</p>
+            <button className="delete" onClick={() => deleteNote(note.id)}>
+              🗑️
+            </button>
+          </div>
         ))}
-       
-          
+      </div>
     </div>
-    </div>
-  )
-}
+  );
+};
 
-export default Notes
+export default Notes;
